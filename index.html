@@ -141,7 +141,7 @@
     <div id="instructions">
       <p>Elige el tiempo, haz clic en el botón tantas veces como puedas y ¡mide tus CPS!</p>
     </div>
-    <div id="timer">Time left: 20s</div>
+    <div id="timer">Time left: 20,00 seg</div>
     <div id="score">0</div>
     <button id="clicker">Click Me!</button>
     <div>
@@ -165,6 +165,7 @@
     let cpsHistory = [];
     let clicksThisSecond = 0;
     let gameStarted = false;
+    let lastSecondChecked = 20;
 
     const timerElement = document.getElementById('timer');
     const scoreElement = document.getElementById('score');
@@ -177,13 +178,18 @@
     const personalRecordElement = document.getElementById('personalRecord');
     const timeButtons = document.querySelectorAll('.time-btn');
 
+    function formatTime(seconds) {
+      // Reemplaza el punto por coma para que luzca como "3,70 seg"
+      return seconds.toFixed(2).replace('.', ',') + ' seg';
+    }
+
     function setTime(seconds) {
-      if (gameStarted && timer !== null) return; // No cambiar el tiempo a mitad de partida
+      if (gameStarted && timer !== null) return; 
       timeTotal = seconds;
       timeLeft = seconds;
-      timerElement.textContent = `Time left: ${timeLeft}s`;
+      lastSecondChecked = seconds;
+      timerElement.textContent = `Time left: ${formatTime(timeLeft)}`;
 
-      // Actualizar clases activas visuales de los botones
       timeButtons.forEach(btn => {
         if (btn.textContent === seconds + 's') {
           btn.classList.add('active');
@@ -217,25 +223,40 @@
       if (timer) return;
       gameStarted = true;
 
-      // Deshabilitar los botones de tiempo mientras se juega
       timeButtons.forEach(btn => btn.style.opacity = '0.6');
 
+      let startTime = performance.now();
+      let durationMs = timeTotal * 1000;
+
       timer = setInterval(() => {
-        timeLeft--;
-        timerElement.textContent = `Time left: ${timeLeft}s`;
-
-        cpsHistory.push(clicksThisSecond);
-        clicksThisSecond = 0;
-
-        if (timeLeft <= 0) {
+        let elapsed = performance.now() - startTime;
+        let remainingMs = durationMs - elapsed;
+        
+        if (remainingMs <= 0) {
+          timeLeft = 0;
+          timerElement.textContent = `Time left: ${formatTime(timeLeft)}`;
           clearInterval(timer);
           timer = null;
           clicker.disabled = true;
           resetBtn.style.display = 'inline-block';
           statsDiv.style.display = 'block';
+          
+          cpsHistory.push(clicksThisSecond);
+          clicksThisSecond = 0;
           updateStats();
+          return;
         }
-      }, 1000);
+
+        timeLeft = remainingMs / 1000;
+        timerElement.textContent = `Time left: ${formatTime(timeLeft)}`;
+
+        let currentSecondFloor = Math.ceil(timeLeft);
+        if (currentSecondFloor < lastSecondChecked) {
+          cpsHistory.push(clicksThisSecond);
+          clicksThisSecond = 0;
+          lastSecondChecked = currentSecondFloor;
+        }
+      }, 10); // Actualización fluida cada 10ms
     }
 
     clicker.addEventListener('click', () => {
@@ -250,16 +271,16 @@
     resetBtn.addEventListener('click', () => {
       score = 0;
       timeLeft = timeTotal;
+      lastSecondChecked = timeTotal;
       cpsHistory = [];
       clicksThisSecond = 0;
       gameStarted = false;
-      timerElement.textContent = `Time left: ${timeLeft}s`;
+      timerElement.textContent = `Time left: ${formatTime(timeLeft)}`;
       scoreElement.textContent = score;
       clicker.disabled = false;
       resetBtn.style.display = 'none';
       statsDiv.style.display = 'none';
 
-      // Volver a habilitar los botones de tiempo
       timeButtons.forEach(btn => btn.style.opacity = '1');
     });
   </script>
