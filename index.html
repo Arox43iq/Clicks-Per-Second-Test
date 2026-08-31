@@ -7,19 +7,19 @@
   <style>
     .bordered-container {
       position: relative;
-      padding: 40px 30px;
+      padding: 60px 40px;
       margin: 21px auto;
       max-width: 600px;
       background: white;
       box-sizing: border-box;
       border-radius: 30px;
       
-      /* --- CORRECCIÓN DE CENTRADO DEL BORDE --- */
-      border: 35px solid transparent;
+      /* --- CORRECCIÓN PARA EVITAR QUE SE VEA APLASTADO --- */
+      border: 60px solid transparent;
       border-image-source: url('Borde.png');
-      border-image-slice: 30;
-      border-image-repeat: stretch;
-      border-image-width: 35px;
+      border-image-slice: 100; /* Vuelve al valor original para respetar las esquinas de tu imagen */
+      border-image-repeat: round; /* Hace que el patrón se repita de forma natural sin estirarse */
+      border-image-width: 60px;
     }
 
    body {
