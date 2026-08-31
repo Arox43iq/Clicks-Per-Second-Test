@@ -3,23 +3,23 @@
 <head>
   <link rel="icon" href="favicon.png" type="image/png" />
   <meta charset="UTF-8" />
-  <title>Clicks Per Second Challenge</title>
+  <title>Clicks Per Second Test</title>
   <style>
     .bordered-container {
       position: relative;
-      padding: 80px 40px;
+      padding: 40px 30px;
       margin: 21px auto;
       max-width: 600px;
       background: white;
       box-sizing: border-box;
       border-radius: 30px;
       
-      /* --- BORDE USANDO TU IMAGEN LOCAL --- */
-      border: 60px solid transparent;
+      /* --- CORRECCIÓN DE CENTRADO DEL BORDE --- */
+      border: 35px solid transparent;
       border-image-source: url('Borde.png');
-      border-image-slice: 100;
-      border-image-repeat: round;
-      border-image-width: 60px;
+      border-image-slice: 30;
+      border-image-repeat: stretch;
+      border-image-width: 35px;
     }
 
     body {
@@ -83,9 +83,6 @@
       margin-left: auto;
       margin-right: auto;
     }
-
-   
-    }
   </style>
 </head>
 <body>
@@ -108,9 +105,6 @@
       <p>Récord personal (total clicks): <span id="personalRecord">0</span></p>
     </div>
   </div>
-
-  
-  </form>
 
   <script>
     const timeTotal = 20;
