@@ -1,3 +1,10 @@
+¡Vaya! Si se sigue viendo blanco y el borde se rompe, significa que el navegador está leyendo una versión en caché muy vieja o que hay algún conflicto con cómo se están aplicando los estilos en tu entorno de GitHub Pages.
+
+Vamos a resolverlo de forma radical. Hagamos que los colores y el borde sean imposibles de ignorar por el navegador añadiendo la etiqueta !important y asegurándonos de que la ruta o el renderizado del borde use valores ultra seguros.
+
+Copia y reemplaza todo tu código con este:
+
+HTML
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -5,29 +12,32 @@
   <meta charset="UTF-8" />
   <title>Clicks Per Second Test</title>
   <style>
+    /* Forzamos el color de fondo en absolutamente todo el documento */
+    html, body {
+      background-color: #FDFBF7 !important;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 20px;
+      margin: 0;
+    }
+
     .bordered-container {
       position: relative;
       padding: 60px 40px;
       margin: 21px auto;
       max-width: 600px;
-      background: #FDFBF7; /* Fondo crema suave dentro del contenedor para cuidar la vista */
+      background-color: #FDFBF7 !important; /* Fondo crema asegurado */
       box-sizing: border-box;
       border-radius: 30px;
       
-      /* --- CORRECCIÓN DEFINITIVA DEL BORDE --- */
-      border: 40px solid transparent;
+      /* --- BORRE Y REINICIO TOTAL DEL BORDE --- */
+      border: 35px solid transparent;
       border-image-source: url('Borde.png');
-      border-image-slice: 100; /* Volvemos al valor ideal de 100 para que no se rompa */
-      border-image-repeat: round; /* Hace que el patrón embellezca y cierre perfecto en los lados */
-      border-image-width: 40px;
+      border-image-slice: 33%; /* Usar porcentajes evita que se rompa sin importar el tamaño de la imagen */
+      border-image-repeat: round;
+      border-image-width: 35px;
     }
 
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding-top: 20px;
-      background: #FDFBF7; /* Fondo general de la página en tono suave */
-    }
     h1 {
       font-size: 2rem;
       margin-bottom: 10px;
