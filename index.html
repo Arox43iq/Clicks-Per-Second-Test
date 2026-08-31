@@ -3,7 +3,7 @@
 <head>
   <link rel="icon" href="favicon.png" type="image/png" />
   <meta charset="UTF-8" />
-  <title>Clicks Per Second Test</title>
+  <title id="page-title">Clicks Per Second Test</title>
   <style>
     /* Forzamos el color de fondo y evitamos selección general por comodidad */
     html, body {
@@ -12,7 +12,6 @@
       text-align: center;
       padding-top: 20px;
       margin: 0;
-      /* Evita que se marque de azul todo el cuerpo por accidente */
       -webkit-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
@@ -24,11 +23,10 @@
       padding: 50px 40px;
       margin: 21px auto;
       max-width: 600px;
-      background-color: #FDFBF7 !important; /* Fondo crema asegurado */
+      background-color: #FDFBF7 !important;
       box-sizing: border-box;
       border-radius: 30px;
       
-      /* --- BORDE DE ALFOMBRA IMPECABLE --- */
       border: 35px solid transparent;
       border-image-source: url('Borde.png');
       border-image-slice: 33%;
@@ -41,7 +39,6 @@
       margin-bottom: 10px;
     }
 
-    /* --- ESTILOS PARA LOS BOTONES DE SELECCIÓN DE TIEMPO --- */
     #time-selector {
       margin-bottom: 20px;
     }
@@ -58,7 +55,6 @@
       font-weight: bold;
       transition: all 0.2s ease;
       
-      /* Evita selección de texto en los botones de tiempo */
       -webkit-user-select: none;
       user-select: none;
     }
@@ -69,7 +65,7 @@
     }
 
     .time-btn.active {
-      background-color: #e67e22; /* Tono cálido acorde al borde naranja */
+      background-color: #e67e22;
       color: white;
       border-color: #d35400;
     }
@@ -93,12 +89,11 @@
       color: white;
       transition: background-color 0.3s ease;
       
-      /* Evita la selección azul al hacer clics rápidos y masivos */
       -webkit-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
       user-select: none;
-      outline: none; /* Quita el borde de enfoque molesto al hacer click rápido */
+      outline: none;
     }
     button#clicker:hover {
       background-color: #45a049;
@@ -147,9 +142,8 @@
 </head>
 <body>
   <div class="bordered-container">
-    <h1>Clicks Per Second Test</h1>
+    <h1 id="main-title">Clicks Per Second Test</h1>
     
-    <!-- Selector de tiempo elegante -->
     <div id="time-selector">
       <button class="time-btn" onclick="setTime(1)">1s</button>
       <button class="time-btn" onclick="setTime(5)">5s</button>
@@ -158,7 +152,7 @@
     </div>
 
     <div id="instructions">
-      <p>Elige el tiempo, haz clic en el botón tantas veces como puedas y ¡mide tus CPS!</p>
+      <p id="instruction-text">Elige el tiempo, haz clic en el botón tantas veces como puedas y ¡mide tus CPS!</p>
     </div>
     <div id="timer">Time left: 20,00 seg</div>
     <div id="score">0</div>
@@ -168,15 +162,52 @@
     </div>
 
     <div id="stats">
-      <p><strong>Game stats:</strong></p>
+      <p><strong id="stats-title">Game stats:</strong></p>
       <p>Max CPS: <span id="maxCPS">0</span></p>
       <p>Avg. CPS: <span id="avgCPS">0</span></p>
       <p>Min CPS: <span id="minCPS">0</span></p>
-      <p>Récord personal (total clicks): <span id="personalRecord">0</span></p>
+      <p><span id="record-label">Récord personal (total clicks):</span> <span id="personalRecord">0</span></p>
     </div>
   </div>
 
   <script>
+    // --- DICCIONARIO DE TRADUCCIONES ---
+    const translations = {
+      es: {
+        title: "Clicks Per Second Test",
+        instructions: "Elige el tiempo, haz clic en el botón tantas veces como puedas y ¡mide tus CPS!",
+        timeLeft: "Tiempo restante",
+        clickerBtn: "¡Haz Clic!",
+        resetBtn: "Reiniciar",
+        statsTitle: "Estadísticas de partida:",
+        recordLabel: "Récord personal (total clics):",
+        unit: "seg"
+      },
+      en: {
+        title: "Clicks Per Second Test",
+        instructions: "Choose the time, click the button as many times as you can, and measure your CPS!",
+        timeLeft: "Time left",
+        clickerBtn: "Click Me!",
+        resetBtn: "Restart",
+        statsTitle: "Game stats:",
+        recordLabel: "Personal record (total clicks):",
+        unit: "sec"
+      }
+    };
+
+    // Detectar el idioma del navegador (ej. "es-AR", "es-ES" -> "es", cualquier otro -> "en")
+    const userLang = navigator.language || navigator.userLanguage;
+    const currentLang = userLang.startsWith('es') ? 'es' : 'en';
+
+    // Aplicar los textos traducidos al cargar la página
+    document.getElementById('main-title').textContent = translations[currentLang].title;
+    document.getElementById('page-title').textContent = translations[currentLang].title;
+    document.getElementById('instruction-text').textContent = translations[currentLang].instructions;
+    document.getElementById('clicker').textContent = translations[currentLang].clickerBtn;
+    document.getElementById('resetBtn').textContent = translations[currentLang].resetBtn;
+    document.getElementById('stats-title').textContent = translations[currentLang].statsTitle;
+    document.getElementById('record-label').textContent = translations[currentLang].recordLabel;
+
     let timeTotal = 20;
     let timeLeft = timeTotal;
     let score = 0;
@@ -198,7 +229,7 @@
     const timeButtons = document.querySelectorAll('.time-btn');
 
     function formatTime(seconds) {
-      return seconds.toFixed(2).replace('.', ',') + ' seg';
+      return `${translations[currentLang].timeLeft}: ${seconds.toFixed(2).replace('.', ',')} ${translations[currentLang].unit}`;
     }
 
     function setTime(seconds) {
@@ -206,7 +237,7 @@
       timeTotal = seconds;
       timeLeft = seconds;
       lastSecondChecked = seconds;
-      timerElement.textContent = `Time left: ${formatTime(timeLeft)}`;
+      timerElement.textContent = formatTime(timeLeft);
 
       timeButtons.forEach(btn => {
         if (btn.textContent === seconds + 's') {
@@ -252,7 +283,7 @@
         
         if (remainingMs <= 0) {
           timeLeft = 0;
-          timerElement.textContent = `Time left: ${formatTime(timeLeft)}`;
+          timerElement.textContent = formatTime(timeLeft);
           clearInterval(timer);
           timer = null;
           clicker.disabled = true;
@@ -266,7 +297,7 @@
         }
 
         timeLeft = remainingMs / 1000;
-        timerElement.textContent = `Time left: ${formatTime(timeLeft)}`;
+        timerElement.textContent = formatTime(timeLeft);
 
         let currentSecondFloor = Math.ceil(timeLeft);
         if (currentSecondFloor < lastSecondChecked) {
@@ -276,6 +307,9 @@
         }
       }, 10);
     }
+
+    // Inicializar el texto del temporizador correctamente al arrancar
+    timerElement.textContent = formatTime(timeLeft);
 
     clicker.addEventListener('click', () => {
       if (timeLeft > 0) {
@@ -293,7 +327,7 @@
       cpsHistory = [];
       clicksThisSecond = 0;
       gameStarted = false;
-      timerElement.textContent = `Time left: ${formatTime(timeLeft)}`;
+      timerElement.textContent = formatTime(timeLeft);
       scoreElement.textContent = score;
       clicker.disabled = false;
       resetBtn.style.display = 'none';
