@@ -10,23 +10,23 @@
       padding: 60px 40px;
       margin: 21px auto;
       max-width: 600px;
-      background: white; /* O puedes cambiarlo aquí por tu color de fondo favorito ej: #FDFBF7 */
+      background: #FDFBF7; /* Fondo crema suave dentro del contenedor para cuidar la vista */
       box-sizing: border-box;
       border-radius: 30px;
       
-      /* --- BORDE REPETIDO EN MOSAICO SIN DEFORMARSE --- */
+      /* --- CORRECCIÓN DEFINITIVA DEL BORDE --- */
       border: 40px solid transparent;
       border-image-source: url('Borde.png');
-      border-image-slice: 250; /* Esto le dice al navegador dónde recortar las esquinas para no estirar el centro */
-      border-image-repeat: repeat; /* Hace que el patrón se repita como un sello sin deformar su resolución */
+      border-image-slice: 100; /* Volvemos al valor ideal de 100 para que no se rompa */
+      border-image-repeat: round; /* Hace que el patrón embellezca y cierre perfecto en los lados */
       border-image-width: 40px;
     }
 
-   body {
+    body {
       font-family: Arial, sans-serif;
       text-align: center;
       padding-top: 20px;
-      background: #FDFBF7;
+      background: #FDFBF7; /* Fondo general de la página en tono suave */
     }
     h1 {
       font-size: 2rem;
@@ -72,7 +72,7 @@
       max-width: 350px;
       margin-left: auto;
       margin-right: auto;
-      background-color: white;
+      background-color: #FDFBF7;
       color: #333;
     }
     #instructions {
