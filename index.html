@@ -3,192 +3,125 @@
 <head>
   <link rel="icon" href="favicon.png" type="image/png" />
   <meta charset="UTF-8" />
-  <title id="page-title">VelocityClick - The Ultimate CPS Test</title>
+  <title>VelocityClick - The Ultimate CPS Test</title>
   <style>
-    /* Variables de colores para modo claro (por defecto) */
     :root {
       --bg-color: #FDFBF7;
       --container-bg: #FDFBF7;
       --text-main: #2c3e50;
       --text-sub: #7f8c8d;
-      --border-btn-bg: #f4efe6;
-      --border-btn-border: #dcd6cd;
-      --border-btn-color: #555;
-      --border-btn-hover: #e8e2d5;
-      --border-btn-text: #e67e22;
-      --comments-bg: #ffffff;
-      --comments-border: #eae5de;
+      --btn-bg: #f4efe6;
+      --btn-border: #dcd6cd;
+      --btn-hover: #e8e2d5;
+      --btn-text: #e67e22;
       --stats-bg: #f1f8e9;
       --stats-border: #a5d6a7;
       --stats-color: #2e7d32;
       --border-filter: none;
     }
 
-    /* Variables de colores para modo oscuro */
     .dark-mode {
       --bg-color: #121212;
       --container-bg: #1e1e1e;
       --text-main: #f1f1f1;
       --text-sub: #aaa;
-      --border-btn-bg: #2a2a2a;
-      --border-btn-border: #444;
-      --border-btn-color: #f1f1f1;
-      --border-btn-hover: #383838;
-      --border-btn-text: #ffa726;
-      --comments-bg: #1e1e1e;
-      --comments-border: #333;
+      --btn-bg: #2a2a2a;
+      --btn-border: #444;
+      --btn-hover: #383838;
+      --btn-text: #ffa726;
       --stats-bg: #1b2e1b;
       --stats-border: #2e7d32;
       --stats-color: #81c784;
-      /* Filtro exclusivo para que el borde blanco se adapte al modo oscuro sin afectar el interior */
-      --border-filter: invert(0.9) hue-rotate(180deg) brightness(0.95);
+      /* Filtro exclusivo para oscurecer y adaptar el fondo blanco de Borde.png en modo oscuro */
+      --border-filter: brightness(0.15) invert(0.85);
     }
 
     html, body {
-      background-color: var(--bg-color) !important;
+      background-color: var(--bg-color);
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
       padding: 20px;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
       user-select: none;
       transition: background-color 0.3s ease;
     }
 
-    /* Contenedor principal de dos columnas */
     .main-layout {
       display: flex;
-      flex-direction: row;
       justify-content: center;
       align-items: flex-start;
       gap: 30px;
       max-width: 1150px;
       margin: 0 auto;
-      box-sizing: border-box;
     }
 
-    .game-column {
+    .game-column, .sidebar-column {
       flex: 1;
-      max-width: 600px;
-      width: 100%;
-    }
-
-    .sidebar-column {
-      flex: 1;
-      max-width: 500px;
+      max-width: 550px;
       width: 100%;
       display: flex;
       flex-direction: column;
       gap: 20px;
     }
 
-    .bordered-container {
-      position: relative;
-      padding: 40px 30px;
-      background-color: var(--container-bg) !important;
-      box-sizing: border-box;
-      border-radius: 30px;
+    .bordered-container, .comments-container {
+      padding: 30px;
+      background-color: var(--container-bg);
+      border-radius: 20px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
       text-align: center;
-      transition: background-color 0.3s ease;
-      
-      /* Aplicamos el borde con imagen */
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+      box-sizing: border-box;
+    }
+
+    /* Contenedor del juego con el borde decorativo y su filtro aislado */
+    .bordered-container {
+      position: relative;
       border: 35px solid transparent;
       border-image-source: url('Borde.png');
       border-image-slice: 33%;
       border-image-repeat: round;
       border-image-width: 35px;
+      /* Aplicamos el filtro de forma que solo afecte al fondo renderizado del borde sin dañar los hijos */
+      filter: drop-shadow(0 0 0 transparent); 
     }
 
-    /* Contenedor especial solo para aplicar el filtro al borde sin afectar el contenido interno */
     .dark-mode .bordered-container {
-      filter: drop-shadow(0 0 0 transparent); /* Evita heredar filtros globales */
-    }
-    
-    /* Truco limpio para oscurecer el fondo blanco del Borde.png en modo oscuro usando un pseudo-elemento o separando el filtro */
-    .dark-mode .bordered-container {
-      border-image-outset: 0;
+      border-image: url('Borde.png') 33% / 35px round;
+      filter: var(--border-filter);
     }
 
-    /* Aplicamos el filtro de inversión de color específicamente al borde de la imagen mediante un truco de capa de estilo */
-    .dark-mode .bordered-container {
-      /* Si prefieres que el borde mantenga su color original pero sin el recuadro blanco molesto, 
-         puedes usar un filtro de mezcla o invertirlo sutilmente */
-    }
+    h1 { font-size: 2.2rem; margin: 0 0 5px; color: var(--text-main); font-weight: 800; }
+    .subtitle { font-size: 0.9rem; color: var(--text-sub); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
 
-    h1 {
-      font-size: 2.2rem;
-      margin-bottom: 5px;
-      color: var(--text-main);
-      font-weight: 800;
-      letter-spacing: -0.5px;
-    }
-
-    .subtitle {
-      font-size: 0.9rem;
-      color: var(--text-sub);
-      margin-bottom: 15px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    /* Barra superior con Proyectos y Botón de Tema */
     .top-actions {
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 10px;
       margin-bottom: 25px;
-      flex-wrap: wrap;
     }
 
-    .top-btn {
-      display: inline-block;
-      background-color: var(--border-btn-bg);
-      border: 2px solid var(--border-btn-border);
-      color: var(--border-btn-text);
+    .top-btn, .time-btn {
+      background-color: var(--btn-bg);
+      border: 2px solid var(--btn-border);
+      color: var(--text-main);
       font-weight: bold;
-      text-decoration: none;
       padding: 6px 16px;
       border-radius: 20px;
+      cursor: pointer;
       transition: all 0.2s ease;
       font-size: 0.9rem;
-      cursor: pointer;
+      text-decoration: none;
     }
-    .top-btn:hover {
-      background-color: var(--border-btn-hover);
+
+    .top-btn:hover, .time-btn:hover {
+      background-color: var(--btn-hover);
       transform: translateY(-1px);
     }
 
-    #theme-toggle {
-      color: var(--text-main);
-      padding: 6px 12px;
-    }
+    .top-btn { color: var(--btn-text); }
 
-    #time-selector {
-      margin-bottom: 20px;
-    }
-
-    .time-btn {
-      padding: 8px 18px;
-      font-size: 0.9rem;
-      margin: 3px;
-      cursor: pointer;
-      border-radius: 20px;
-      border: 2px solid var(--border-btn-border);
-      background-color: var(--border-btn-bg);
-      color: var(--border-btn-color);
-      font-weight: bold;
-      transition: all 0.2s ease;
-      user-select: none;
-    }
-
-    .time-btn:hover {
-      background-color: var(--border-btn-hover);
-      transform: translateY(-1px);
-    }
-
+    .time-btn { padding: 8px 18px; margin: 3px; color: var(--text-sub); }
     .time-btn.active {
       background-color: #e67e22;
       color: white;
@@ -196,19 +129,9 @@
       box-shadow: 0 4px 10px rgba(230, 126, 34, 0.3);
     }
 
-    #timer {
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: var(--text-main);
-      margin-bottom: 10px;
-    }
-    #score {
-      font-size: 4rem;
-      font-weight: 800;
-      color: var(--text-main);
-      margin: 10px 0;
-      text-shadow: 2px 2px 0px rgba(0,0,0,0.03);
-    }
+    #timer { font-size: 1.5rem; font-weight: 600; color: var(--text-main); margin-bottom: 10px; }
+    #score { font-size: 4rem; font-weight: 800; color: var(--text-main); margin: 10px 0; }
+
     button#clicker {
       padding: 35px 70px;
       font-size: 2.2rem;
@@ -221,18 +144,10 @@
       color: white;
       box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
       transition: all 0.1s ease;
-      user-select: none;
-      outline: none;
     }
-    button#clicker:hover {
-      background: linear-gradient(135deg, #43A047, #388E3C);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(76, 175, 80, 0.5);
-    }
-    button#clicker:active {
-      transform: translateY(2px);
-      box-shadow: 0 2px 10px rgba(76, 175, 80, 0.4);
-    }
+    button#clicker:hover { background: linear-gradient(135deg, #43A047, #388E3C); transform: translateY(-2px); }
+    button#clicker:active { transform: translateY(2px); }
+
     #resetBtn {
       padding: 12px 25px;
       font-size: 1.1rem;
@@ -243,15 +158,10 @@
       border-radius: 12px;
       cursor: pointer;
       display: none;
-      transition: all 0.2s ease;
       margin-top: 15px;
       box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
-      user-select: none;
     }
-    #resetBtn:hover {
-      background: linear-gradient(135deg, #e53935, #c62828);
-      transform: translateY(-1px);
-    }
+
     #stats {
       margin-top: 25px;
       font-size: 1.1rem;
@@ -265,57 +175,24 @@
       margin-right: auto;
       background-color: var(--stats-bg);
       color: var(--stats-color);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-    }
-    #instructions {
-      font-size: 0.95rem;
-      margin-bottom: 15px;
-      color: var(--text-sub);
-      max-width: 400px;
-      margin-left: auto;
-      margin-right: auto;
     }
 
-    /* Estilos para la sección de comentarios */
-    .comments-container {
-      padding: 25px;
-      background-color: var(--comments-bg);
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-      text-align: left;
-      box-sizing: border-box;
-      border: 1px solid var(--comments-border);
-      transition: background-color 0.3s ease, border-color 0.3s ease;
-    }
-    .comments-container h3 {
-      margin-top: 0;
-      color: var(--text-main);
-      font-size: 1.3rem;
-      border-bottom: 2px solid var(--border-btn-bg);
-      padding-bottom: 10px;
-    }
+    #instructions { font-size: 0.95rem; margin-bottom: 15px; color: var(--text-sub); }
 
-    /* Diseño responsivo para celulares */
+    .comments-container { text-align: left; border: 1px solid var(--btn-border); }
+    .comments-container h3 { margin-top: 0; color: var(--text-main); font-size: 1.3rem; border-bottom: 2px solid var(--btn-bg); padding-bottom: 10px; }
+
     @media (max-width: 900px) {
-      .main-layout {
-        flex-direction: column;
-        align-items: center;
-      }
-      .game-column, .sidebar-column {
-        max-width: 600px;
-        width: 100%;
-      }
+      .main-layout { flex-direction: column; align-items: center; }
     }
   </style>
 </head>
 <body>
 
   <div class="main-layout">
-    
-    <!-- COLUMNA IZQUIERDA: El Juego -->
     <div class="game-column">
       <div class="bordered-container">
-        <h1 id="main-title">VelocityClick</h1>
+        <h1>VelocityClick</h1>
         <div class="subtitle">The Ultimate CPS Test</div>
         
         <div class="top-actions">
@@ -330,17 +207,11 @@
           <button class="time-btn active" onclick="setTime(20)">20s</button>
         </div>
 
-        <div id="instructions">
-          <p id="instruction-text">Elige el tiempo, haz clic en el botón tantas veces como puedas y ¡mide tus CPS!</p>
-        </div>
+        <div id="instructions"><p id="instruction-text">Elige el tiempo, haz clic en el botón tantas veces como puedas y ¡mide tus CPS!</p></div>
         <div id="timer">Time left: 20,00 seg</div>
         <div id="score">0</div>
-        <div>
-          <button id="clicker">¡Haz Clic!</button>
-        </div>
-        <div>
-          <button id="resetBtn">Restart</button>
-        </div>
+        <div><button id="clicker">¡Haz Clic!</button></div>
+        <div><button id="resetBtn">Restart</button></div>
 
         <div id="stats">
           <p><strong id="stats-title">Game stats:</strong></p>
@@ -352,68 +223,27 @@
       </div>
     </div>
 
-    <!-- COLUMNA DERECHA: Comentarios -->
     <div class="sidebar-column">
       <div class="comments-container">
         <h3 id="comments-title">💬 Comentarios y Récords</h3>
         <p id="comments-subtitle" style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 20px;">¡Deja tu marca o comparte tu récord con la comunidad! (Inicia sesión con GitHub para comentar)</p>
-        
         <div id="utterances-container"></div>
       </div>
     </div>
-
   </div>
 
   <script>
     const translations = {
-      es: {
-        title: "VelocityClick",
-        instructions: "Elige el tiempo, haz clic en el botón tantas veces como puedas y ¡mide tus CPS!",
-        timeLeft: "Tiempo restante",
-        clickerBtn: "¡Haz Clic!",
-        resetBtn: "Reiniciar",
-        statsTitle: "Estadísticas de partida:",
-        recordLabel: "Récord personal (total clics):",
-        unit: "seg",
-        commentsTitle: "💬 Comentarios y Récords",
-        commentsSubtitle: "¡Deja tu marca o comparte tu récord con la comunidad! (Inicia sesión con GitHub para comentar)",
-        projectsText: "🚀 Proyectos",
-        darkMode: "🌙 Modo Oscuro",
-        lightMode: "☀️ Modo Claro"
-      },
-      en: {
-        title: "VelocityClick",
-        instructions: "Choose the time, click the button as many times as you can, and measure your CPS!",
-        timeLeft: "Time left",
-        clickerBtn: "Click Me!",
-        resetBtn: "Restart",
-        statsTitle: "Game stats:",
-        recordLabel: "Personal record (total clicks):",
-        unit: "sec",
-        commentsTitle: "💬 Comments & Records",
-        commentsSubtitle: "Leave your mark or share your score with the community! (Log in with GitHub to comment)",
-        projectsText: "🚀 Projects",
-        darkMode: "🌙 Dark Mode",
-        lightMode: "☀️ Light Mode"
-      }
+      es: { timeLeft: "Tiempo restante", unit: "seg", darkMode: "🌙 Modo Oscuro", lightMode: "☀️ Modo Claro" },
+      en: { timeLeft: "Time left", unit: "sec", darkMode: "🌙 Dark Mode", lightMode: "☀️ Light Mode" }
     };
 
-    const userLang = navigator.language || navigator.userLanguage;
-    const currentLang = userLang.startsWith('es') ? 'es' : 'en';
-
-    document.getElementById('instruction-text').textContent = translations[currentLang].instructions;
-    document.getElementById('clicker').textContent = translations[currentLang].clickerBtn;
-    document.getElementById('resetBtn').textContent = translations[currentLang].resetBtn;
-    document.getElementById('stats-title').textContent = translations[currentLang].statsTitle;
-    document.getElementById('record-label').textContent = translations[currentLang].recordLabel;
-    document.getElementById('comments-title').textContent = translations[currentLang].commentsTitle;
-    document.getElementById('comments-subtitle').textContent = translations[currentLang].commentsSubtitle;
-    document.getElementById('projects-link-text').textContent = translations[currentLang].projectsText;
+    const currentLang = (navigator.language || navigator.userLanguage).startsWith('es') ? 'es' : 'en';
+    const themeToggleBtn = document.getElementById('theme-toggle');
 
     function loadUtterances(isDark) {
       const container = document.getElementById('utterances-container');
       container.innerHTML = '';
-      
       const script = document.createElement('script');
       script.src = 'https://utteranc.es/client.js';
       script.setAttribute('repo', 'Arox43iq/Clicks-Per-Second-Test');
@@ -421,20 +251,12 @@
       script.setAttribute('theme', isDark ? 'github-dark' : 'github-light');
       script.setAttribute('crossorigin', 'anonymous');
       script.async = true;
-      
       container.appendChild(script);
     }
 
-    const themeToggleBtn = document.getElementById('theme-toggle');
-    
     function setThemeUI(isDark) {
-      if (isDark) {
-        document.documentElement.classList.add('dark-mode');
-        themeToggleBtn.textContent = translations[currentLang].lightMode;
-      } else {
-        document.documentElement.classList.remove('dark-mode');
-        themeToggleBtn.textContent = translations[currentLang].darkMode;
-      }
+      document.documentElement.classList.toggle('dark-mode', isDark);
+      themeToggleBtn.textContent = translations[currentLang][isDark ? 'lightMode' : 'darkMode'];
       loadUtterances(isDark);
     }
 
@@ -444,86 +266,39 @@
       setThemeUI(isDark);
     }
 
-    const savedTheme = localStorage.getItem('velocityClickTheme');
-    if (savedTheme === 'dark') {
-      setThemeUI(true);
-    } else {
-      setThemeUI(false);
-    }
+    setThemeUI(localStorage.getItem('velocityClickTheme') === 'dark');
 
-    let timeTotal = 20;
-    let timeLeft = timeTotal;
-    let score = 0;
-    let timer = null;
-    let cpsHistory = [];
-    let clicksThisSecond = 0;
-    let gameStarted = false;
-    let lastSecondChecked = 20;
+    let timeTotal = 20, timeLeft = 20, score = 0, timer = null, cpsHistory = [], clicksThisSecond = 0, gameStarted = false, lastSecondChecked = 20;
+    const timerElement = document.getElementById('timer'), scoreElement = document.getElementById('score'), clicker = document.getElementById('clicker'), resetBtn = document.getElementById('resetBtn'), statsDiv = document.getElementById('stats');
 
-    const timerElement = document.getElementById('timer');
-    const scoreElement = document.getElementById('score');
-    const clicker = document.getElementById('clicker');
-    const resetBtn = document.getElementById('resetBtn');
-    const statsDiv = document.getElementById('stats');
-    const maxCPSElement = document.getElementById('maxCPS');
-    const avgCPSElement = document.getElementById('avgCPS');
-    const minCPSElement = document.getElementById('minCPS');
-    const personalRecordElement = document.getElementById('personalRecord');
-    const timeButtons = document.querySelectorAll('.time-btn');
-
-    function formatTime(seconds) {
-      return `${translations[currentLang].timeLeft}: ${seconds.toFixed(2).replace('.', ',')} ${translations[currentLang].unit}`;
-    }
+    function formatTime(s) { return `${translations[currentLang].timeLeft}: ${s.toFixed(2).replace('.', ',')} ${translations[currentLang].unit}`; }
 
     function setTime(seconds) {
-      if (gameStarted && timer !== null) return; 
-      timeTotal = seconds;
-      timeLeft = seconds;
-      lastSecondChecked = seconds;
+      if (gameStarted && timer) return;
+      timeTotal = timeLeft = lastSecondChecked = seconds;
       timerElement.textContent = formatTime(timeLeft);
-
-      timeButtons.forEach(btn => {
-        if (btn.textContent === seconds + 's') {
-          btn.classList.add('active');
-        } else {
-          btn.classList.remove('active');
-        }
-      });
+      document.querySelectorAll('.time-btn').forEach(btn => btn.classList.toggle('active', btn.textContent === seconds + 's'));
     }
 
     function updateStats() {
-      if (cpsHistory.length === 0) return;
-
-      const max = Math.max(...cpsHistory);
-      const min = Math.min(...cpsHistory);
-      const avg = (cpsHistory.reduce((a, b) => a + b, 0) / cpsHistory.length).toFixed(2);
-
-      maxCPSElement.textContent = max;
-      minCPSElement.textContent = min;
-      avgCPSElement.textContent = avg;
-
-      let personalRecord = localStorage.getItem('clickerPersonalRecord_' + timeTotal);
-      personalRecord = personalRecord ? parseInt(personalRecord, 10) : 0;
-      if (score > personalRecord) {
-        localStorage.setItem('clickerPersonalRecord_' + timeTotal, score);
-        personalRecord = score;
-      }
-      personalRecordElement.textContent = personalRecord;
+      if (!cpsHistory.length) return;
+      document.getElementById('maxCPS').textContent = Math.max(...cpsHistory);
+      document.getElementById('minCPS').textContent = Math.min(...cpsHistory);
+      document.getElementById('avgCPS').textContent = (cpsHistory.reduce((a, b) => a + b, 0) / cpsHistory.length).toFixed(2);
+      
+      let record = parseInt(localStorage.getItem('clickerPersonalRecord_' + timeTotal) || '0', 10);
+      if (score > record) { localStorage.setItem('clickerPersonalRecord_' + timeTotal, score); record = score; }
+      document.getElementById('personalRecord').textContent = record;
     }
 
     function startTimer() {
       if (timer) return;
       gameStarted = true;
-
-      timeButtons.forEach(btn => btn.style.opacity = '0.6');
-
-      let startTime = performance.now();
-      let durationMs = timeTotal * 1000;
+      document.querySelectorAll('.time-btn').forEach(btn => btn.style.opacity = '0.6');
+      let startTime = performance.now(), durationMs = timeTotal * 1000;
 
       timer = setInterval(() => {
-        let elapsed = performance.now() - startTime;
-        let remainingMs = durationMs - elapsed;
-        
+        let remainingMs = durationMs - (performance.now() - startTime);
         if (remainingMs <= 0) {
           timeLeft = 0;
           timerElement.textContent = formatTime(timeLeft);
@@ -532,16 +307,13 @@
           clicker.disabled = true;
           resetBtn.style.display = 'inline-block';
           statsDiv.style.display = 'block';
-          
           cpsHistory.push(clicksThisSecond);
           clicksThisSecond = 0;
           updateStats();
           return;
         }
-
         timeLeft = remainingMs / 1000;
         timerElement.textContent = formatTime(timeLeft);
-
         let currentSecondFloor = Math.ceil(timeLeft);
         if (currentSecondFloor < lastSecondChecked) {
           cpsHistory.push(clicksThisSecond);
@@ -564,18 +336,14 @@
 
     resetBtn.addEventListener('click', () => {
       score = 0;
-      timeLeft = timeTotal;
-      lastSecondChecked = timeTotal;
+      timeLeft = lastSecondChecked = timeTotal;
       cpsHistory = [];
-      clicksThisSecond = 0;
-      gameStarted = false;
+      clicksThisSecond = gameStarted = false;
       timerElement.textContent = formatTime(timeLeft);
       scoreElement.textContent = score;
       clicker.disabled = false;
-      resetBtn.style.display = 'none';
-      statsDiv.style.display = 'none';
-
-      timeButtons.forEach(btn => btn.style.opacity = '1');
+      resetBtn.style.display = statsDiv.style.display = 'none';
+      document.querySelectorAll('.time-btn').forEach(btn => btn.style.opacity = '1');
     });
   </script>
 </body>
