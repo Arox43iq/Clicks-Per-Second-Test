@@ -23,7 +23,7 @@
       --stats-color: #2e7d32;
     }
 
-    /* Variables de colores para modo oscuro corregidas */
+    /* Variables de colores para modo oscuro */
     .dark-mode {
       --bg-color: #121212;
       --container-bg: #1e1e1e;
@@ -390,10 +390,9 @@
     document.getElementById('comments-subtitle').textContent = translations[currentLang].commentsSubtitle;
     document.getElementById('projects-link-text').textContent = translations[currentLang].projectsText;
 
-    // Función para cargar los comentarios de Utterances adaptados al tema
     function loadUtterances(isDark) {
       const container = document.getElementById('utterances-container');
-      container.innerHTML = ''; // Limpiar anterior si existe
+      container.innerHTML = '';
       
       const script = document.createElement('script');
       script.src = 'https://utteranc.es/client.js';
@@ -425,7 +424,6 @@
       setThemeUI(isDark);
     }
 
-    // Cargar preferencia guardada al iniciar
     const savedTheme = localStorage.getItem('velocityClickTheme');
     if (savedTheme === 'dark') {
       setThemeUI(true);
@@ -484,7 +482,7 @@
       minCPSElement.textContent = min;
       avgCPSElement.textContent = avg;
 
--      let personalRecord = localStorage.getItem('clickerPersonalRecord_' + timeTotal);
+      let personalRecord = localStorage.getItem('clickerPersonalRecord_' + timeTotal);
       personalRecord = personalRecord ? parseInt(personalRecord, 10) : 0;
       if (score > personalRecord) {
         localStorage.setItem('clickerPersonalRecord_' + timeTotal, score);
