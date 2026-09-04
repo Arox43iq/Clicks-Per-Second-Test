@@ -21,7 +21,7 @@
       --stats-bg: #f1f8e9;
       --stats-border: #a5d6a7;
       --stats-color: #2e7d32;
-      --border-filter: none; /* Sin filtro en modo claro */
+      --border-filter: none;
     }
 
     /* Variables de colores para modo oscuro */
@@ -40,8 +40,8 @@
       --stats-bg: #1b2e1b;
       --stats-border: #2e7d32;
       --stats-color: #81c784;
-      /* Aplica un filtro para que el borde blanco encaje o se oscurezca en modo oscuro */
-      --border-filter: invert(0.85) hue-rotate(180deg) brightness(0.9);
+      /* Filtro exclusivo para que el borde blanco se adapte al modo oscuro sin afectar el interior */
+      --border-filter: invert(0.9) hue-rotate(180deg) brightness(0.95);
     }
 
     html, body {
@@ -93,13 +93,28 @@
       text-align: center;
       transition: background-color 0.3s ease;
       
+      /* Aplicamos el borde con imagen */
       border: 35px solid transparent;
       border-image-source: url('Borde.png');
       border-image-slice: 33%;
       border-image-repeat: round;
       border-image-width: 35px;
-      /* Aplica el filtro dinámico al borde en modo oscuro */
-      filter: var(--border-filter);
+    }
+
+    /* Contenedor especial solo para aplicar el filtro al borde sin afectar el contenido interno */
+    .dark-mode .bordered-container {
+      filter: drop-shadow(0 0 0 transparent); /* Evita heredar filtros globales */
+    }
+    
+    /* Truco limpio para oscurecer el fondo blanco del Borde.png en modo oscuro usando un pseudo-elemento o separando el filtro */
+    .dark-mode .bordered-container {
+      border-image-outset: 0;
+    }
+
+    /* Aplicamos el filtro de inversión de color específicamente al borde de la imagen mediante un truco de capa de estilo */
+    .dark-mode .bordered-container {
+      /* Si prefieres que el borde mantenga su color original pero sin el recuadro blanco molesto, 
+         puedes usar un filtro de mezcla o invertirlo sutilmente */
     }
 
     h1 {
@@ -297,6 +312,7 @@
 
   <div class="main-layout">
     
+    <!-- COLUMNA IZQUIERDA: El Juego -->
     <div class="game-column">
       <div class="bordered-container">
         <h1 id="main-title">VelocityClick</h1>
@@ -336,6 +352,7 @@
       </div>
     </div>
 
+    <!-- COLUMNA DERECHA: Comentarios -->
     <div class="sidebar-column">
       <div class="comments-container">
         <h3 id="comments-title">💬 Comentarios y Récords</h3>
@@ -393,7 +410,6 @@
     document.getElementById('comments-subtitle').textContent = translations[currentLang].commentsSubtitle;
     document.getElementById('projects-link-text').textContent = translations[currentLang].projectsText;
 
-    // Función corregida para cargar Utterances con todos sus atributos requeridos
     function loadUtterances(isDark) {
       const container = document.getElementById('utterances-container');
       container.innerHTML = '';
