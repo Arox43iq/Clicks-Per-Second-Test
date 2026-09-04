@@ -8,24 +8,51 @@
     html, body {
       background-color: #FDFBF7 !important;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      text-align: center;
-      padding-top: 20px;
       margin: 0;
+      padding: 20px;
       -webkit-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
       user-select: none;
     }
 
+    /* Contenedor principal de dos columnas */
+    .main-layout {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 30px;
+      max-width: 1150px;
+      margin: 0 auto;
+      box-sizing: border-box;
+    }
+
+    /* Columna izquierda: El juego */
+    .game-column {
+      flex: 1;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    /* Columna derecha: Comentarios y Proyectos */
+    .sidebar-column {
+      flex: 1;
+      max-width: 500px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
     .bordered-container {
       position: relative;
       padding: 40px 30px;
-      margin: 20px auto;
-      max-width: 600px;
       background-color: #FDFBF7 !important;
       box-sizing: border-box;
       border-radius: 30px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      text-align: center;
       
       border: 35px solid transparent;
       border-image-source: url('Borde.png');
@@ -50,7 +77,6 @@
       letter-spacing: 1px;
     }
 
-    /* Estilo visible y destacado para la sección de proyectos arriba */
     .top-projects-banner {
       margin-bottom: 25px;
       font-size: 0.9rem;
@@ -186,9 +212,7 @@
 
     /* Estilos para la sección de comentarios */
     .comments-container {
-      max-width: 600px;
-      margin: 40px auto 20px auto;
-      padding: 30px;
+      padding: 25px;
       background-color: #ffffff;
       border-radius: 20px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
@@ -199,60 +223,81 @@
     .comments-container h3 {
       margin-top: 0;
       color: #2c3e50;
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       border-bottom: 2px solid #f4efe6;
       padding-bottom: 10px;
+    }
+
+    /* Diseño responsivo para celulares (se apila en una sola columna) */
+    @media (max-width: 900px) {
+      .main-layout {
+        flex-direction: column;
+        align-items: center;
+      }
+      .game-column, .sidebar-column {
+        max-width: 600px;
+        width: 100%;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="bordered-container">
-    <h1 id="main-title">VelocityClick</h1>
-    <div class="subtitle">The Ultimate CPS Test</div>
+
+  <div class="main-layout">
     
-    <div class="top-projects-banner">
-      <a href="https://github.com/Arox43iq?tab=repositories" target="_blank" id="projects-link-text">🚀 Ver mis otros proyectos en GitHub</a>
+    <div class="game-column">
+      <div class="bordered-container">
+        <h1 id="main-title">VelocityClick</h1>
+        <div class="subtitle">The Ultimate CPS Test</div>
+        
+        <div class="top-projects-banner">
+          <a href="https://github.com/Arox43iq?tab=repositories" target="_blank" id="projects-link-text">🚀 Ver mis otros proyectos en GitHub</a>
+        </div>
+
+        <div id="time-selector">
+          <button class="time-btn" onclick="setTime(1)">1s</button>
+          <button class="time-btn" onclick="setTime(5)">5s</button>
+          <button class="time-btn" onclick="setTime(10)">10s</button>
+          <button class="time-btn active" onclick="setTime(20)">20s</button>
+        </div>
+
+        <div id="instructions">
+          <p id="instruction-text">Elige el tiempo, haz clic en el botón tantas veces como puedas y ¡mide tus CPS!</p>
+        </div>
+        <div id="timer">Time left: 20,00 seg</div>
+        <div id="score">0</div>
+        <div>
+          <button id="clicker">¡Haz Clic!</button>
+        </div>
+        <div>
+          <button id="resetBtn">Restart</button>
+        </div>
+
+        <div id="stats">
+          <p><strong id="stats-title">Game stats:</strong></p>
+          <p>Max CPS: <span id="maxCPS">0</span></p>
+          <p>Avg. CPS: <span id="avgCPS">0</span></p>
+          <p>Min CPS: <span id="minCPS">0</span></p>
+          <p><span id="record-label">Récord personal (total clicks):</span> <span id="personalRecord">0</span></p>
+        </div>
+      </div>
     </div>
 
-    <div id="time-selector">
-      <button class="time-btn" onclick="setTime(1)">1s</button>
-      <button class="time-btn" onclick="setTime(5)">5s</button>
-      <button class="time-btn" onclick="setTime(10)">10s</button>
-      <button class="time-btn active" onclick="setTime(20)">20s</button>
+    <div class="sidebar-column">
+      <div class="comments-container">
+        <h3 id="comments-title">💬 Comentarios y Récords</h3>
+        <p id="comments-subtitle" style="font-size: 0.85rem; color: #666; margin-bottom: 20px;">¡Deja tu marca o comparte tu récord con la comunidad! (Inicia sesión con GitHub para comentar)</p>
+        
+        <script src="https://utteranc.es/client.js"
+            repo="Arox43iq/Clicks-Per-Second-Test"
+            issue-term="pathname"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+        </script>
+      </div>
     </div>
 
-    <div id="instructions">
-      <p id="instruction-text">Elige el tiempo, haz clic en el botón tantas veces como puedas y ¡mide tus CPS!</p>
-    </div>
-    <div id="timer">Time left: 20,00 seg</div>
-    <div id="score">0</div>
-    <div>
-      <button id="clicker">¡Haz Clic!</button>
-    </div>
-    <div>
-      <button id="resetBtn">Restart</button>
-    </div>
-
-    <div id="stats">
-      <p><strong id="stats-title">Game stats:</strong></p>
-      <p>Max CPS: <span id="maxCPS">0</span></p>
-      <p>Avg. CPS: <span id="avgCPS">0</span></p>
-      <p>Min CPS: <span id="minCPS">0</span></p>
-      <p><span id="record-label">Récord personal (total clicks):</span> <span id="personalRecord">0</span></p>
-    </div>
-  </div>
-
-  <div class="comments-container">
-    <h3 id="comments-title">💬 Comentarios y Récords</h3>
-    <p id="comments-subtitle" style="font-size: 0.85rem; color: #666; margin-bottom: 20px;">¡Deja tu marca o comparte tu récord con la comunidad! (Inicia sesión con GitHub para comentar)</p>
-    
-    <script src="https://utteranc.es/client.js"
-        repo="Arox43iq/Clicks-Per-Second-Test"
-        issue-term="pathname"
-        theme="github-light"
-        crossorigin="anonymous"
-        async>
-    </script>
   </div>
 
   <script>
