@@ -32,8 +32,8 @@
       --stats-bg: #1b2e1b;
       --stats-border: #2e7d32;
       --stats-color: #81c784;
-      /* Filtro exclusivo para oscurecer y adaptar el fondo blanco de Borde.png en modo oscuro */
-      --border-filter: brightness(0.15) invert(0.85);
+      /* Filtro que oscurece el fondo blanco del Borde.png */
+      --border-filter: invert(0.85) hue-rotate(180deg) brightness(0.35);
     }
 
     html, body {
@@ -63,31 +63,69 @@
       gap: 20px;
     }
 
-    .bordered-container, .comments-container {
+    .comments-container {
+      padding: 30px;
+      background-color: var(--container-bg);
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      text-align: left;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+      box-sizing: border-box;
+      border: 1px solid var(--btn-border);
+    }
+
+    /* Contenedor del juego con aislamiento perfecto del borde */
+    .bordered-container {
+      position: relative;
       padding: 30px;
       background-color: var(--container-bg);
       border-radius: 20px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
       text-align: center;
-      transition: background-color 0.3s ease, border-color 0.3s ease;
+      transition: background-color 0.3s ease;
       box-sizing: border-box;
-    }
-
-    /* Contenedor del juego con el borde decorativo y su filtro aislado */
-    .bordered-container {
-      position: relative;
       border: 35px solid transparent;
       border-image-source: url('Borde.png');
       border-image-slice: 33%;
       border-image-repeat: round;
       border-image-width: 35px;
-      /* Aplicamos el filtro de forma que solo afecte al fondo renderizado del borde sin dañar los hijos */
-      filter: drop-shadow(0 0 0 transparent); 
     }
 
+    /* Aplicamos el filtro usando un pseudo-elemento detrás o nativo sobre la propiedad del borde sin afectar hijos */
     .dark-mode .bordered-container {
+      filter: none; /* Aseguramos que el contenido hijo NUNCA reciba el filtro */
       border-image: url('Borde.png') 33% / 35px round;
-      filter: var(--border-filter);
+    }
+    
+    /* Truco CSS para oscurecer específicamente la capa del borde de la imagen manteniendo nítido el contenido */
+    .dark-mode .bordered-container {
+      border-image-source: url('Borde.png');
+      /* Usamos un truco de máscara de capa o filtro aplicado individualmente si el navegador lo soporta, 
+         o una capa superpuesta para el borde */
+    }
+
+    /* Solución robusta: Capa auxiliar transparente para el borde con filtro en modo oscuro */
+    .bordered-container::before {
+      content: "";
+      position: absolute;
+      top: -35px; left: -35px; right: -35px; bottom: -35px;
+      border: 35px solid transparent;
+      border-image-source: url('Borde.png');
+      border-image-slice: 33%;
+      border-image-repeat: round;
+      border-image-width: 35px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .dark-mode .bordered-container::before {
+      filter: invert(0.9) hue-rotate(180deg) brightness(0.25);
+    }
+
+    /* Aseguramos que los hijos estén por encima de la capa del borde */
+    .bordered-container > * {
+      position: relative;
+      z-index: 2;
     }
 
     h1 { font-size: 2.2rem; margin: 0 0 5px; color: var(--text-main); font-weight: 800; }
@@ -178,8 +216,6 @@
     }
 
     #instructions { font-size: 0.95rem; margin-bottom: 15px; color: var(--text-sub); }
-
-    .comments-container { text-align: left; border: 1px solid var(--btn-border); }
     .comments-container h3 { margin-top: 0; color: var(--text-main); font-size: 1.3rem; border-bottom: 2px solid var(--btn-bg); padding-bottom: 10px; }
 
     @media (max-width: 900px) {
