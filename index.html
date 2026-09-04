@@ -180,6 +180,31 @@
       border-bottom: 2px solid #f4efe6;
       padding-bottom: 10px;
     }
+
+    /* Estilos para la tarjeta de proyectos */
+    .projects-container {
+      max-width: 600px;
+      margin: 20px auto 40px auto;
+      padding: 20px 30px;
+      background-color: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      text-align: center;
+      box-sizing: border-box;
+      border: 1px solid #eae5de;
+      font-size: 0.95rem;
+      color: #555;
+    }
+    .projects-container a {
+      color: #e67e22;
+      font-weight: bold;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .projects-container a:hover {
+      color: #d35400;
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -228,6 +253,10 @@
     </script>
   </div>
 
+  <div class="projects-container">
+    <p id="projects-text">🚀 Conoce mis otros proyectos aquí: <a href="https://github.com/Arox43iq?tab=repositories" target="_blank">GitHub Repositories</a></p>
+  </div>
+
   <script>
     const translations = {
       es: {
@@ -240,7 +269,8 @@
         recordLabel: "Récord personal (total clics):",
         unit: "seg",
         commentsTitle: "💬 Comentarios y Récords",
-        commentsSubtitle: "¡Deja tu marca o comparte tu récord con la comunidad! (Inicia sesión con GitHub para comentar)"
+        commentsSubtitle: "¡Deja tu marca o comparte tu récord con la comunidad! (Inicia sesión con GitHub para comentar)",
+        projectsText: "🚀 Conoce mis otros proyectos aquí: "
       },
       en: {
         title: "VelocityClick",
@@ -252,7 +282,8 @@
         recordLabel: "Personal record (total clicks):",
         unit: "sec",
         commentsTitle: "💬 Comments & Records",
-        commentsSubtitle: "Leave your mark or share your score with the community! (Log in with GitHub to comment)"
+        commentsSubtitle: "Leave your mark or share your score with the community! (Log in with GitHub to comment)",
+        projectsText: "🚀 Check out my other projects here: "
       }
     };
 
@@ -262,10 +293,14 @@
     document.getElementById('instruction-text').textContent = translations[currentLang].instructions;
     document.getElementById('clicker').textContent = translations[currentLang].clickerBtn;
     document.getElementById('resetBtn').textContent = translations[currentLang].resetBtn;
-    document.getElementById('stats-title').textContent = translations[currentLang].statsTitle;
+    document.getElementById('stats-title').textContent = translations[currentLog || currentLang].statsTitle;
     document.getElementById('record-label').textContent = translations[currentLang].recordLabel;
     document.getElementById('comments-title').textContent = translations[currentLang].commentsTitle;
     document.getElementById('comments-subtitle').textContent = translations[currentLang].commentsSubtitle;
+    
+    // Traducción dinámica del texto de proyectos manteniendo el enlace intacto
+    const projectsParagraph = document.getElementById('projects-text');
+    projectsParagraph.innerHTML = `${translations[currentLang].projectsText}<a href="https://github.com/Arox43iq?tab=repositories" target="_blank">GitHub Repositories</a>`;
 
     let timeTotal = 20;
     let timeLeft = timeTotal;
