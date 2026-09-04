@@ -45,9 +45,32 @@
     .subtitle {
       font-size: 0.9rem;
       color: #7f8c8d;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       text-transform: uppercase;
       letter-spacing: 1px;
+    }
+
+    /* Estilo visible y destacado para la sección de proyectos arriba */
+    .top-projects-banner {
+      margin-bottom: 25px;
+      font-size: 0.9rem;
+    }
+    .top-projects-banner a {
+      display: inline-block;
+      background-color: #f4efe6;
+      border: 2px solid #dcd6cd;
+      color: #e67e22;
+      font-weight: bold;
+      text-decoration: none;
+      padding: 6px 16px;
+      border-radius: 20px;
+      transition: all 0.2s ease;
+    }
+    .top-projects-banner a:hover {
+      background-color: #e8e2d5;
+      border-color: #c7beaf;
+      color: #d35400;
+      transform: translateY(-1px);
     }
 
     #time-selector {
@@ -180,31 +203,6 @@
       border-bottom: 2px solid #f4efe6;
       padding-bottom: 10px;
     }
-
-    /* Estilos para la tarjeta de proyectos */
-    .projects-container {
-      max-width: 600px;
-      margin: 20px auto 40px auto;
-      padding: 20px 30px;
-      background-color: #ffffff;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-      text-align: center;
-      box-sizing: border-box;
-      border: 1px solid #eae5de;
-      font-size: 0.95rem;
-      color: #555;
-    }
-    .projects-container a {
-      color: #e67e22;
-      font-weight: bold;
-      text-decoration: none;
-      transition: color 0.2s ease;
-    }
-    .projects-container a:hover {
-      color: #d35400;
-      text-decoration: underline;
-    }
   </style>
 </head>
 <body>
@@ -212,6 +210,10 @@
     <h1 id="main-title">VelocityClick</h1>
     <div class="subtitle">The Ultimate CPS Test</div>
     
+    <div class="top-projects-banner">
+      <a href="https://github.com/Arox43iq?tab=repositories" target="_blank" id="projects-link-text">🚀 Ver mis otros proyectos en GitHub</a>
+    </div>
+
     <div id="time-selector">
       <button class="time-btn" onclick="setTime(1)">1s</button>
       <button class="time-btn" onclick="setTime(5)">5s</button>
@@ -253,10 +255,6 @@
     </script>
   </div>
 
-  <div class="projects-container">
-    <p id="projects-text">🚀 Conoce mis otros proyectos aquí: <a href="https://github.com/Arox43iq?tab=repositories" target="_blank">GitHub Repositories</a></p>
-  </div>
-
   <script>
     const translations = {
       es: {
@@ -270,7 +268,7 @@
         unit: "seg",
         commentsTitle: "💬 Comentarios y Récords",
         commentsSubtitle: "¡Deja tu marca o comparte tu récord con la comunidad! (Inicia sesión con GitHub para comentar)",
-        projectsText: "🚀 Conoce mis otros proyectos aquí: "
+        projectsText: "🚀 Ver mis otros proyectos en GitHub"
       },
       en: {
         title: "VelocityClick",
@@ -283,7 +281,7 @@
         unit: "sec",
         commentsTitle: "💬 Comments & Records",
         commentsSubtitle: "Leave your mark or share your score with the community! (Log in with GitHub to comment)",
-        projectsText: "🚀 Check out my other projects here: "
+        projectsText: "🚀 Check out my other projects on GitHub"
       }
     };
 
@@ -293,14 +291,11 @@
     document.getElementById('instruction-text').textContent = translations[currentLang].instructions;
     document.getElementById('clicker').textContent = translations[currentLang].clickerBtn;
     document.getElementById('resetBtn').textContent = translations[currentLang].resetBtn;
-    document.getElementById('stats-title').textContent = translations[currentLog || currentLang].statsTitle;
+    document.getElementById('stats-title').textContent = translations[currentLang].statsTitle;
     document.getElementById('record-label').textContent = translations[currentLang].recordLabel;
     document.getElementById('comments-title').textContent = translations[currentLang].commentsTitle;
     document.getElementById('comments-subtitle').textContent = translations[currentLang].commentsSubtitle;
-    
-    // Traducción dinámica del texto de proyectos manteniendo el enlace intacto
-    const projectsParagraph = document.getElementById('projects-text');
-    projectsParagraph.innerHTML = `${translations[currentLang].projectsText}<a href="https://github.com/Arox43iq?tab=repositories" target="_blank">GitHub Repositories</a>`;
+    document.getElementById('projects-link-text').textContent = translations[currentLang].projectsText;
 
     let timeTotal = 20;
     let timeLeft = timeTotal;
