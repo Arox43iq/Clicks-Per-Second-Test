@@ -15,6 +15,7 @@
       --border-btn-border: #dcd6cd;
       --border-btn-color: #555;
       --border-btn-hover: #e8e2d5;
+      --border-btn-text: #e67e22;
       --comments-bg: #ffffff;
       --comments-border: #eae5de;
       --stats-bg: #f1f8e9;
@@ -22,7 +23,7 @@
       --stats-color: #2e7d32;
     }
 
-    /* Variables de colores para modo oscuro */
+    /* Variables de colores para modo oscuro corregidas */
     .dark-mode {
       --bg-color: #121212;
       --container-bg: #1e1e1e;
@@ -30,8 +31,9 @@
       --text-sub: #aaa;
       --border-btn-bg: #2a2a2a;
       --border-btn-border: #444;
-      --border-btn-color: #ddd;
-      --border-btn-hover: #333;
+      --border-btn-color: #f1f1f1;
+      --border-btn-hover: #383838;
+      --border-btn-text: #ffa726;
       --comments-bg: #1e1e1e;
       --comments-border: #333;
       --stats-bg: #1b2e1b;
@@ -125,7 +127,7 @@
       display: inline-block;
       background-color: var(--border-btn-bg);
       border: 2px solid var(--border-btn-border);
-      color: #e67e22;
+      color: var(--border-btn-text);
       font-weight: bold;
       text-decoration: none;
       padding: 6px 16px;
@@ -290,6 +292,7 @@
 
   <div class="main-layout">
     
+    <!-- COLUMNA IZQUIERDA: El Juego -->
     <div class="game-column">
       <div class="bordered-container">
         <h1 id="main-title">VelocityClick</h1>
@@ -329,18 +332,13 @@
       </div>
     </div>
 
+    <!-- COLUMNA DERECHA: Comentarios -->
     <div class="sidebar-column">
       <div class="comments-container">
         <h3 id="comments-title">💬 Comentarios y Récords</h3>
         <p id="comments-subtitle" style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 20px;">¡Deja tu marca o comparte tu récord con la comunidad! (Inicia sesión con GitHub para comentar)</p>
         
-        <script src="https://utteranc.es/client.js"
-            repo="Arox43iq/Clicks-Per-Second-Test"
-            issue-term="pathname"
-            theme="github-light"
-            crossorigin="anonymous"
-            async>
-        </script>
+        <div id="utterances-container"></div>
       </div>
     </div>
 
@@ -392,7 +390,22 @@
     document.getElementById('comments-subtitle').textContent = translations[currentLang].commentsSubtitle;
     document.getElementById('projects-link-text').textContent = translations[currentLang].projectsText;
 
-    // Lógica para el cambio de Tema
+    // Función para cargar los comentarios de Utterances adaptados al tema
+    function loadUtterances(isDark) {
+      const container = document.getElementById('utterances-container');
+      container.innerHTML = ''; // Limpiar anterior si existe
+      
+      const script = document.createElement('script');
+      script.src = 'https://utteranc.es/client.js';
+      script.repo = 'Arox43iq/Clicks-Per-Second-Test';
+      script.issueTerm = 'pathname';
+      script.theme = isDark ? 'github-dark' : 'github-light';
+      script.crossOrigin = 'anonymous';
+      script.async = true;
+      
+      container.appendChild(script);
+    }
+
     const themeToggleBtn = document.getElementById('theme-toggle');
     
     function setThemeUI(isDark) {
@@ -403,6 +416,7 @@
         document.documentElement.classList.remove('dark-mode');
         themeToggleBtn.textContent = translations[currentLang].darkMode;
       }
+      loadUtterances(isDark);
     }
 
     function toggleTheme() {
@@ -411,7 +425,7 @@
       setThemeUI(isDark);
     }
 
-    // Cargar preferencia guardada
+    // Cargar preferencia guardada al iniciar
     const savedTheme = localStorage.getItem('velocityClickTheme');
     if (savedTheme === 'dark') {
       setThemeUI(true);
@@ -470,7 +484,7 @@
       minCPSElement.textContent = min;
       avgCPSElement.textContent = avg;
 
-      let personalRecord = localStorage.getItem('clickerPersonalRecord_' + timeTotal);
+-      let personalRecord = localStorage.getItem('clickerPersonalRecord_' + timeTotal);
       personalRecord = personalRecord ? parseInt(personalRecord, 10) : 0;
       if (score > personalRecord) {
         localStorage.setItem('clickerPersonalRecord_' + timeTotal, score);
