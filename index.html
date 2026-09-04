@@ -21,6 +21,7 @@
       --stats-bg: #f1f8e9;
       --stats-border: #a5d6a7;
       --stats-color: #2e7d32;
+      --border-filter: none; /* Sin filtro en modo claro */
     }
 
     /* Variables de colores para modo oscuro */
@@ -39,6 +40,8 @@
       --stats-bg: #1b2e1b;
       --stats-border: #2e7d32;
       --stats-color: #81c784;
+      /* Aplica un filtro para que el borde blanco encaje o se oscurezca en modo oscuro */
+      --border-filter: invert(0.85) hue-rotate(180deg) brightness(0.9);
     }
 
     html, body {
@@ -95,6 +98,8 @@
       border-image-slice: 33%;
       border-image-repeat: round;
       border-image-width: 35px;
+      /* Aplica el filtro dinámico al borde en modo oscuro */
+      filter: var(--border-filter);
     }
 
     h1 {
@@ -292,7 +297,6 @@
 
   <div class="main-layout">
     
-    <!-- COLUMNA IZQUIERDA: El Juego -->
     <div class="game-column">
       <div class="bordered-container">
         <h1 id="main-title">VelocityClick</h1>
@@ -332,7 +336,6 @@
       </div>
     </div>
 
-    <!-- COLUMNA DERECHA: Comentarios -->
     <div class="sidebar-column">
       <div class="comments-container">
         <h3 id="comments-title">💬 Comentarios y Récords</h3>
@@ -390,16 +393,17 @@
     document.getElementById('comments-subtitle').textContent = translations[currentLang].commentsSubtitle;
     document.getElementById('projects-link-text').textContent = translations[currentLang].projectsText;
 
+    // Función corregida para cargar Utterances con todos sus atributos requeridos
     function loadUtterances(isDark) {
       const container = document.getElementById('utterances-container');
       container.innerHTML = '';
       
       const script = document.createElement('script');
       script.src = 'https://utteranc.es/client.js';
-      script.repo = 'Arox43iq/Clicks-Per-Second-Test';
-      script.issueTerm = 'pathname';
-      script.theme = isDark ? 'github-dark' : 'github-light';
-      script.crossOrigin = 'anonymous';
+      script.setAttribute('repo', 'Arox43iq/Clicks-Per-Second-Test');
+      script.setAttribute('issue-term', 'pathname');
+      script.setAttribute('theme', isDark ? 'github-dark' : 'github-light');
+      script.setAttribute('crossorigin', 'anonymous');
       script.async = true;
       
       container.appendChild(script);
